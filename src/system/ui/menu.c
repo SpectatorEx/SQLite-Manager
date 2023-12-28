@@ -17,10 +17,8 @@ void ui_menu_draw(ui_menu *menu) {
             
             ui_option *option = &menu->options[i];
 
-            if (option->name != NULL) {
-                console_cursor_pos(option->pos.x, option->pos.y);
-                printf("[%d] - %s", i, option->name);
-            }
+            console_cursor_pos(option->pos.x, option->pos.y);
+            printf("[%d] - %s", i, option->name);
         }
 
         key_down = getch();
