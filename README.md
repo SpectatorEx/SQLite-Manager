@@ -13,7 +13,8 @@ Perhaps in the future the manager will need many more improvements, but now ther
 ## How to use
 
 First you need to open an existing database or create a new one. 
-The created database should be stored in the "*database*" folder. When creating it, you must enter the full name of the file, including its extension.
+You must enter the full name of the file, including its extension.
+The created database should be stored in the "*database*" folder.
 
 For example: *users.db*.
 
