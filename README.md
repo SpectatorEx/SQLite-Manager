@@ -26,11 +26,11 @@ For example: *table.sql* or *users/table.sql*.
 ## Preview
 [ **Base interface** ]
 
-![main](https://github.com/SpectatorEx/SQLite-manager/assets/124715053/45a37f8a-030d-4b6f-ada5-869a9bdf2798)
+<img src="https://github.com/SpectatorEx/SQLite-manager/assets/124715053/45a37f8a-030d-4b6f-ada5-869a9bdf2798" width="800"/>
 
-[ **SQL query output** ]
+[ **Table output** ]
 
-![output_query](https://github.com/SpectatorEx/SQLite-manager/assets/124715053/042010c0-f782-4891-943f-794d487edc5c)
+<img src="https://github.com/SpectatorEx/SQLite-manager/assets/124715053/f430e52b-5904-4896-ae41-6fca527e3d4c" width= "800"/>
 
 ## Credits
 [SQLite repository](https://github.com/sqlite/sqlite)
