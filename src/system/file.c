@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-char* file_read(char *filename) {
+char* file_read(const char *filename) {
     FILE *file = fopen(filename, "r");
 
     size_t count = sizeof(char);
