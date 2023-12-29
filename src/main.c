@@ -24,7 +24,7 @@ static void ui_draw(void);
 
 extern void display_logo(ui_frame *frame, const char **logo);
 extern int print_table(sqlite3 *database, const char *sql);
-extern char* file_read(char *filename);
+extern char* file_read(const char *filename);
 
 int main(void) {
     console_window_title("SQLite Manager");
