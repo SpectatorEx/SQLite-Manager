@@ -27,5 +27,5 @@ void display_logo(ui_frame *frame, const char **logo) {
     }
 
     console_cursor_pos(frame->size.x + 10, frame->size.y + i + 5);
-    puts("Created by Spectator. (ver. 0.9.0)");
+    puts("Created by Spectator. (ver. 0.9.1)");
 }

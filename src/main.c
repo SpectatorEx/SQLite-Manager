@@ -27,7 +27,7 @@ extern int print_table(sqlite3 *database, const char *sql);
 extern char* file_read(const char *filename);
 
 int main(void) {
-    console_window_title("SQLite Manager");
+    console_title("SQLite Manager");
     console_cursor_info(FALSE, 1);
 
     system("chcp 65001");
@@ -62,7 +62,9 @@ int main(void) {
                 break;
             case 1:
                 if (database == NULL) {
-                    ui_frame_print(&frame_info, "Database isn't open!");
+                    ui_frame_print(&frame_info, 
+                        "[Manager] - database isn't open!");
+
                     break;
                 }
 
@@ -101,7 +103,9 @@ static void database_menu(void) {
         switch (index) {
             case 0:
                 if (database != NULL) {
-                    ui_frame_print(&frame_info, "Database is already open!");
+                    ui_frame_print(&frame_info, 
+                        "[Manager] - database is already open!");
+
                     break;
                 }
 
@@ -112,7 +116,9 @@ static void database_menu(void) {
                 break;
             case 2:
                 if (database == NULL) {
-                    ui_frame_print(&frame_info, "Database isn't open!");
+                    ui_frame_print(&frame_info, 
+                        "[Manager] - database isn't open!");
+
                     break;
                 }
 
@@ -139,7 +145,7 @@ static void database_open(void) {
     int status = sqlite3_open(filename, &database);
 
     if (status != SQLITE_OK) {
-        ui_frame_print(&frame_info, sqlite3_errmsg(database));
+        ui_frame_printf(&frame_info, "[SQLite] - %s.", sqlite3_errmsg(database));
         sqlite3_close(database);
 
         database = NULL;
@@ -147,7 +153,7 @@ static void database_open(void) {
         return;
     }
 
-    ui_frame_print(&frame_info, "Database has opened!");
+    ui_frame_printf(&frame_info, "[Manager] - %s has opened!", buffer);
 }
 
 static void database_delete(void) {
@@ -162,15 +168,17 @@ static void database_delete(void) {
     int error = DeleteFile(filename);
 
     if (error == 0) {
-        ui_frame_print(&frame_info, "Database is in use or doesn't exist.");
+        ui_frame_print(&frame_info, 
+            "[Manager] - database is in use or doesn't exist.");
+        
         return;
     }
 
-    ui_frame_print(&frame_info, "Database has been deleted!");
+    ui_frame_printf(&frame_info, "[Manager] - %s has been deleted!", buffer);
 }
 
 static void database_close(void) {
-    ui_frame_print(&frame_info, "Database is closed!");
+    ui_frame_print(&frame_info, "[Manager] - database is closed!");
     sqlite3_close(database);
 
     database = NULL;
@@ -188,18 +196,20 @@ static void query_execute(void) {
     char *sql = file_read(filename);
 
     if (sql == NULL) {
-        ui_frame_print(&frame_info, "File is empty or doesn't exist!");
+        ui_frame_print(&frame_info, 
+            "[Manager] - File is empty or doesn't exist!");
+
         return;
     }
 
     char *error_msg = NULL;
-    bool exec_status = sqlite3_exec(database, sql, NULL, NULL, &error_msg);
+    bool status = sqlite3_exec(database, sql, NULL, NULL, &error_msg);
 
-    if (exec_status != SQLITE_OK) {
-        ui_frame_print(&frame_info, error_msg);
+    if (status != SQLITE_OK) {
+        ui_frame_printf(&frame_info, "[SQLite] - %s.", error_msg);
     } else {
         display_query(sql);
-        ui_frame_print(&frame_info, "SQL query has been executed!");
+        ui_frame_print(&frame_info, "[Manager] - SQL query has been executed!");
     }
 
     sqlite3_free(error_msg);
