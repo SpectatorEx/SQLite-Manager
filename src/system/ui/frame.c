@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdarg.h>
 
 #include "cengine32.h"
 #include "ui/frame.h"
@@ -42,10 +43,10 @@ void ui_frame_clear(ui_frame *frame) {
 void ui_frame_print(ui_frame *frame, const char *text) {
     if (text == NULL) { return; }
 
-    char buffer[30][16];
+    char buffer[32][16];
 
     int length = 0, pos_y = 0; 
-    int amount = string_split(buffer[0], text, "\n ", 30, 16);
+    int amount = string_split(buffer[0], text, "\n ", 32, 16);
 
     ui_frame_clear(frame);
     console_cursor_pos(frame->size.x + 2, frame->size.y + 2);
@@ -65,6 +66,28 @@ void ui_frame_print(ui_frame *frame, const char *text) {
     }
 
     puts(buffer[amount - 1]);
+}
+
+void ui_frame_printf(ui_frame *frame, const char *format, ...) {
+    va_list args, temp_args;
+
+    va_start(args, format);
+    va_copy(temp_args, args);
+
+    int length = vsnprintf(NULL, 0, format, args) + 1;
+    va_end(args);
+
+    if (length < 0) {
+        ui_frame_print(frame, "Format string error.");
+        return;
+    }
+
+    char buffer[length];
+
+    vsnprintf(buffer, sizeof(buffer), format, temp_args);
+    va_end(temp_args);
+
+    ui_frame_print(frame, buffer);
 }
 
 void ui_frame_input(ui_frame *frame, const char *message, char *buffer, int length) {
