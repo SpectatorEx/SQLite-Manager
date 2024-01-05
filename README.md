@@ -19,7 +19,7 @@ The created database should be stored in the "*database*" folder.
 For example: *users.db*.
 
 Similarly with SQL queries, enter the full name of the file (including subdirectories) with the .sql extension.\
-All queries are stored in the "queries" folder. For convenience, you can create subdirectories with the database name\
+All queries are stored in the "*queries*" folder. For convenience, you can create subdirectories with the database name\
 and execute queries from there.
 
 For example: *table.sql* or *users/table.sql*.
@@ -34,4 +34,5 @@ For example: *table.sql* or *users/table.sql*.
 <img src="https://github.com/SpectatorEx/SQLite-manager/assets/124715053/f430e52b-5904-4896-ae41-6fca527e3d4c" width= "700"/>
 
 ## Credits
-[SQLite repository](https://github.com/sqlite/sqlite)
+[SQLite repository](https://github.com/sqlite/sqlite)\
+[CEngine32 repository](https://github.com/SpectatorEx/CEngine32)
