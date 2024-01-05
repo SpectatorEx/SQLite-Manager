@@ -9,7 +9,7 @@
  */
 typedef enum {
 
-    BLACK              = 0,
+    COLOR_BLACK        = 0,
 
     FCOLOR_DARKBLUE    = 0x01,
     FCOLOR_DARKGREEN   = 0x02,
@@ -62,7 +62,7 @@ BOOL console_set_color(console_color color);
  *  \brief 
  *      Returns the color index of text attributes.
  *  \return
- *      Returns false if there are any errors.
+ *      Returns zero if there are any errors.
  */
 USHORT console_get_color(void);
 

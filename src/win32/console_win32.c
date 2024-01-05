@@ -1,44 +1,60 @@
 #include "win32/console_win32.h"
 
-BOOL console_window_title(LPCTSTR title) {
+BOOL console_title(LPCTSTR title) {
     return SetConsoleTitle(title);
 }
 
+ULONG console_get_title(LPSTR title, ULONG size) {
+    return GetConsoleTitle(title, size);
+}
+
 BOOL console_window_size(SHORT width, SHORT height) {
-    SMALL_RECT window_size = { 0, 0 };
+    SMALL_RECT window = { 0, 0 };
 
-    window_size.Right = width - 1;
-    window_size.Bottom = height - 1;
+    window.Right = width - 1;
+    window.Bottom = height - 1;
 
-    return SetConsoleWindowInfo(HANDLE_STDOUT, 1, &window_size);
+    return SetConsoleWindowInfo(HANDLE_STDOUT, 1, &window);
 }
 
-COORD console_get_window_size(void) {
-    CONSOLE_SCREEN_BUFFER_INFO buffer_info;
-    BOOL error_check = GetConsoleScreenBufferInfo(HANDLE_STDOUT, &buffer_info);
+BOOL console_get_window_size(SHORT *width, SHORT *height) {
+    CONSOLE_SCREEN_BUFFER_INFO buffer;
+    BOOL success = GetConsoleScreenBufferInfo(HANDLE_STDOUT, &buffer);
 
-    COORD window_size = { 0, 0 };
-
-    if (error_check) {
-        window_size.X = buffer_info.srWindow.Right - buffer_info.srWindow.Left + 1;
-        window_size.Y = buffer_info.srWindow.Bottom - buffer_info.srWindow.Top + 1;
+    if (success) {
+        *width = buffer.srWindow.Right - buffer.srWindow.Left + 1;
+        *height = buffer.srWindow.Bottom - buffer.srWindow.Top + 1;
     }
-
-    return window_size; 
+    
+    return success;
 }
 
-COORD console_get_window_max_size(void) {
-    COORD window_size = GetLargestConsoleWindowSize(HANDLE_STDOUT);
-    return window_size;
+void console_get_window_max_size(SHORT *width, SHORT *height) {
+    COORD size = GetLargestConsoleWindowSize(HANDLE_STDOUT);
+
+    *width = size.X;
+    *height = size.Y; 
 }
 
 BOOL console_buffer_size(SHORT width, SHORT height) {
-    COORD buffer_size;
+    COORD size;
 
-    buffer_size.X = width;
-    buffer_size.Y = height;
+    size.X = width;
+    size.Y = height;
 
-    return SetConsoleScreenBufferSize(HANDLE_STDOUT, buffer_size);
+    return SetConsoleScreenBufferSize(HANDLE_STDOUT, size);
+}
+
+BOOL console_get_buffer_size(SHORT *width, SHORT *height) {
+    CONSOLE_SCREEN_BUFFER_INFO buffer;
+    BOOL success = GetConsoleScreenBufferInfo(HANDLE_STDOUT, &buffer);
+
+    if (success) {
+        *width = buffer.dwSize.X;
+        *height = buffer.dwSize.Y;
+    }
+
+    return success;
 }
 
 BOOL console_cursor_pos(SHORT x, SHORT y) {
@@ -50,28 +66,47 @@ BOOL console_cursor_pos(SHORT x, SHORT y) {
     return SetConsoleCursorPosition(HANDLE_STDOUT, pos);
 }
 
-BOOL console_cursor_info(BOOL visible, ULONG size) {
-    CONSOLE_CURSOR_INFO cursor_info;
+BOOL console_get_cursor_pos(SHORT *x, SHORT *y) {
+    CONSOLE_SCREEN_BUFFER_INFO buffer;
+    BOOL success = GetConsoleScreenBufferInfo(HANDLE_STDOUT, &buffer);
 
-    cursor_info.bVisible = visible;
-    cursor_info.dwSize = size;
+    if (success) {
+        *x = buffer.dwCursorPosition.X;
+        *y = buffer.dwCursorPosition.Y;
+    }
 
-    return SetConsoleCursorInfo(HANDLE_STDOUT, &cursor_info);
+    return success;
 }
 
-BOOL console_set_font(LPCWSTR font, SHORT width, SHORT height, UINT weight) {
-    CONSOLE_FONT_INFOEX text_font;
+BOOL console_cursor_info(BOOL visible, ULONG size) {
+    CONSOLE_CURSOR_INFO cursor;
 
-    text_font.cbSize = sizeof(text_font);
-    text_font.nFont = 0;
-    text_font.dwFontSize.X = width;
-    text_font.dwFontSize.Y = height;
-    text_font.FontFamily = FW_DONTCARE;
-    text_font.FontWeight = weight;
+    cursor.bVisible = visible;
+    cursor.dwSize = size;
 
-    lstrcpyW(text_font.FaceName, font);
+    return SetConsoleCursorInfo(HANDLE_STDOUT, &cursor);
+}
 
-    return SetCurrentConsoleFontEx(HANDLE_STDOUT, FALSE, &text_font);
+CONSOLE_CURSOR_INFO console_get_cursor_info(void) {
+    CONSOLE_CURSOR_INFO cursor;
+    GetConsoleCursorInfo(HANDLE_STDOUT, &cursor);
+
+    return cursor;
+}
+
+BOOL console_set_font(LPCWSTR name, SHORT width, SHORT height, UINT weight) {
+    CONSOLE_FONT_INFOEX font;
+
+    font.cbSize = sizeof(font);
+    font.nFont = 0;
+    font.dwFontSize.X = width;
+    font.dwFontSize.Y = height;
+    font.FontFamily = FW_DONTCARE;
+    font.FontWeight = weight;
+
+    lstrcpyW(font.FaceName, name);
+
+    return SetCurrentConsoleFontEx(HANDLE_STDOUT, FALSE, &font);
 }
 
 BOOL console_print_error(ULONG error_code) {

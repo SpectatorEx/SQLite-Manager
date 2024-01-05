@@ -5,12 +5,12 @@ BOOL console_set_color(console_color color) {
 }
 
 USHORT console_get_color(void) {
-    CONSOLE_SCREEN_BUFFER_INFO buffer_info;
-    BOOL error_check = GetConsoleScreenBufferInfo(HANDLE_STDOUT, &buffer_info);
+    CONSOLE_SCREEN_BUFFER_INFO buffer;
+    BOOL success = GetConsoleScreenBufferInfo(HANDLE_STDOUT, &buffer);
 
-    if (!error_check) {
+    if (!success) {
         return 0;
     }
 
-    return buffer_info.wAttributes;
+    return buffer.wAttributes;
 }

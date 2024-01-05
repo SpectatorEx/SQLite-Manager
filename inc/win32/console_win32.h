@@ -8,17 +8,32 @@
 
 #define HANDLE_STDIN GetStdHandle(STD_INPUT_HANDLE)
 #define HANDLE_STDOUT GetStdHandle(STD_OUTPUT_HANDLE)
+#define HANDLE_STDERR GetStdHandle(STD_ERROR_HANDLE)
 
 /**
  *  \brief
- *      Sets title of console.
+ *      Sets the console title.
  *  \param title
  *      Pointer to string.
  *  \return
  *      If the function succeeds, the return value is true.
  *      Otherwise false.     
  */
-BOOL console_window_title(LPCTSTR title);
+BOOL console_title(LPCTSTR title);
+
+/**
+ *  \brief
+ *      Returns the console title.
+ *  \param title
+ *      Pointer to buffer.
+ * 	\param size
+ * 		Buffer size.
+ *  \return
+ *      If the function succeeds, the return value is the 
+ * 		length of the console window's title.
+ *      Otherwise zero.     
+ */
+ULONG console_get_title(LPSTR title, ULONG size);
 
 /**
  *  \brief 
@@ -40,15 +55,18 @@ BOOL console_window_size(SHORT width, SHORT height);
  *  \brief 
  *      Returns the current number of rows and columns 
  *      in the console window.
+ * 	\return
+ * 		If the function succeeds, the return value is true.
+ *      Otherwise false.
  */
-COORD console_get_window_size(void);
+BOOL console_get_window_size(SHORT *width, SHORT *height);
 
 /**
  *  \brief
  *      Returns the number of rows and columns 
  *      based on the current font and screen resolution.
  */
-COORD console_get_window_max_size(void);
+void console_get_window_max_size(SHORT *width, SHORT *height);
 
 /**
  *  \brief 
@@ -63,6 +81,13 @@ COORD console_get_window_max_size(void);
  */ 
 BOOL console_buffer_size(SHORT width, SHORT height);
 
+/**
+ *  \return
+ *      If the function succeeds, the return value is true.
+ *      Otherwise false.
+ */
+BOOL console_get_buffer_size(SHORT *width, SHORT *height);
+
 /**  
  *  \brief 
  *      Sets the cursor position.
@@ -71,6 +96,15 @@ BOOL console_buffer_size(SHORT width, SHORT height);
  *      Otherwise false.
  */
 BOOL console_cursor_pos(SHORT x, SHORT y);
+
+/**  
+ *  \brief 
+ *    	Returns the cursor position.
+ *  \return
+ *      If the function succeeds, the return value is true.
+ *      Otherwise false.
+ */
+BOOL console_get_cursor_pos(SHORT *x, SHORT *y);
 
 /** \brief 
  *      Sets the cursor size and visibility. 
@@ -84,10 +118,15 @@ BOOL console_cursor_pos(SHORT x, SHORT y);
  */
 BOOL console_cursor_info(BOOL visible, ULONG size);
 
+/**	\brief
+ * 		Returns the cursor info.
+*/
+CONSOLE_CURSOR_INFO console_get_cursor_info(void);
+
 /** \brief
- *      Sets the font of the text.
- *  \param font
- *      The name of the font defined in the OS. Example: L"Consolas".
+ *      Sets the font of the console.
+ *  \param name
+ *      The name of the font defined in the Windows. Example: L"Consolas".
  *  \param weight
  *      The weight can range from 100 to 1000, in multiples of 100.
  *  \return
